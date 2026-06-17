@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">BuildAI Ultra</string>
+    <string name="subtitle">One Idea. One Button. One APK.</string>
+    <string name="idea_hint">Describe the app you want to build…\n\nExample: Build a food delivery app with login, maps, payments and live order tracking.</string>
+    <string name="build_button">BUILD THE APP</string>
+    <string name="dialog_building">Building your app…</string>
+    <string name="dialog_analyzing">Analyzing your idea…</string>
+    <string name="dialog_planning">Planning architecture…</string>
+    <string name="dialog_designing">Designing user interface…</string>
+    <string name="dialog_coding">Generating application logic…</string>
+    <string name="dialog_database">Creating database schema…</string>
+    <string name="dialog_api">Building APIs…</string>
+    <string name="dialog_navigation">Setting up navigation…</string>
+    <string name="dialog_assets">Generating assets…</string>
+    <string name="dialog_compiling">Compiling APK…</string>
+    <string name="dialog_complete_title">App Ready</string>
+    <string name="dialog_install">INSTALL APK</string>
+    <string name="dialog_close">Close</string>
+    <string name="empty_idea_error">Please describe your app idea first.</string>
+    <string name="installing">Installing…</string>
+</resources>
