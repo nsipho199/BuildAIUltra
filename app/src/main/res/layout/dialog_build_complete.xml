@@ -8,8 +8,8 @@
     android:padding="32dp">
 
     <ImageView
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:src="@drawable/ic_check"
         app:tint="@color/colorPrimary" />
 
@@ -19,29 +19,29 @@
         android:layout_marginTop="16dp"
         android:text="@string/dialog_complete_title"
         android:textColor="?android:textColorPrimary"
-        android:textSize="24sp"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/sizeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="Your app has been built successfully and is ready to install."
-        android:textAlignment="center"
         android:textColor="?android:textColorSecondary"
         android:textSize="14sp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/installButton"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/dialog_install"
-        android:textSize="16sp"
+        android:layout_height="60dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/install_apk"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:cornerRadius="16dp"
         app:icon="@drawable/ic_rocket"
-        app:iconGravity="textStart" />
+        app:iconGravity="textStart"
+        app:iconSize="24dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/closeButton"

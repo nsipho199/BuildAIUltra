@@ -1,18 +1,15 @@
 package com.buildai.ultra.ui
 
 import android.content.Intent
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.FileProvider
 import com.buildai.ultra.R
 import com.buildai.ultra.databinding.DialogBuildCompleteBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.io.File
 
 class BuildCompleteDialog : BottomSheetDialogFragment() {
 
@@ -29,8 +26,18 @@ class BuildCompleteDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val downloadUrl = arguments?.getString(ARG_DOWNLOAD_URL) ?: ""
+        val apkSize = arguments?.getLong(ARG_APK_SIZE, 0) ?: 0
+
+        val sizeText = when {
+            apkSize < 1024 -> "$apkSize B"
+            apkSize < 1024 * 1024 -> "${apkSize / 1024} KB"
+            else -> "${apkSize / (1024 * 1024)} MB"
+        }
+        binding.sizeText.text = "APK Size: $sizeText"
+
         binding.installButton.setOnClickListener {
-            triggerInstall()
+            downloadAndInstall(downloadUrl)
         }
 
         binding.closeButton.setOnClickListener {
@@ -38,32 +45,15 @@ class BuildCompleteDialog : BottomSheetDialogFragment() {
         }
     }
 
-    private fun triggerInstall() {
+    private fun downloadAndInstall(url: String) {
         try {
-            val downloadsDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS
-            )
-            val apkFile = File(downloadsDir, "BuildAIUltra.apk")
-            if (!apkFile.exists()) {
-                apkFile.parentFile?.mkdirs()
-                apkFile.createNewFile()
-            }
-            val uri = FileProvider.getUriForFile(
-                requireContext(),
-                "${requireContext().packageName}.fileprovider",
-                apkFile
-            )
             val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(uri, "application/vnd.android.package-archive")
+                setDataAndType(Uri.parse(url), "application/vnd.android.package-archive")
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
             }
             startActivity(intent)
         } catch (e: Exception) {
-            Toast.makeText(
-                requireContext(),
-                "Install triggered. Check your downloads folder.",
-                Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(requireContext(), "Download URL: $url", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -76,7 +66,15 @@ class BuildCompleteDialog : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "BuildCompleteDialog"
+        private const val ARG_DOWNLOAD_URL = "download_url"
+        private const val ARG_APK_SIZE = "apk_size"
 
-        fun newInstance(): BuildCompleteDialog = BuildCompleteDialog()
+        fun newInstance(downloadUrl: String, apkSize: Long): BuildCompleteDialog {
+            val args = Bundle().apply {
+                putString(ARG_DOWNLOAD_URL, downloadUrl)
+                putLong(ARG_APK_SIZE, apkSize)
+            }
+            return BuildCompleteDialog().apply { arguments = args }
+        }
     }
 }

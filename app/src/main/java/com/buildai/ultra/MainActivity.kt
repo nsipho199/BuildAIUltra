@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[BuildViewModel::class.java]
 
         setupWindow()
-        setupToolbar()
         setupBuildButton()
         observeState()
     }
@@ -44,20 +43,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
-    }
-
     private fun setupBuildButton() {
         binding.buildButton.setOnClickListener {
             val idea = binding.ideaInput.text.toString().trim()
+
             if (idea.isEmpty()) {
                 val shake = AnimationUtils.loadAnimation(this, R.anim.shake)
                 binding.ideaInput.startAnimation(shake)
                 Toast.makeText(this, R.string.empty_idea_error, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
             viewModel.startBuild(idea)
             showProgressDialog()
         }
@@ -74,10 +70,15 @@ class MainActivity : AppCompatActivity() {
         progressDialog = null
     }
 
-    private fun showCompleteDialog() {
+    private fun showCompleteDialog(downloadUrl: String, apkSize: Long) {
         dismissProgressDialog()
-        val dialog = BuildCompleteDialog.newInstance()
+        val dialog = BuildCompleteDialog.newInstance(downloadUrl, apkSize)
         dialog.show(supportFragmentManager, BuildCompleteDialog.TAG)
+    }
+
+    private fun showError(message: String) {
+        dismissProgressDialog()
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     private fun observeState() {
@@ -85,16 +86,16 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
                     progressDialog?.updateState(state)
-                    if (state.isComplete) {
-                        showCompleteDialog()
+
+                    if (state.isComplete && state.downloadUrl != null) {
+                        showCompleteDialog(state.downloadUrl, state.apkSize)
+                    }
+
+                    if (!state.isRunning && !state.isComplete && state.errorMessage != null) {
+                        showError(state.errorMessage)
                     }
                 }
             }
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return true
     }
 }

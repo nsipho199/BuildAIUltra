@@ -3,11 +3,13 @@ package com.buildai.ultra.model
 enum class BuildPhase {
     ANALYZING,
     PLANNING,
-    DESIGNING,
-    CODING,
+    UI_GENERATION,
+    LOGIC_GENERATION,
     DATABASE,
-    API,
+    API_CREATION,
     NAVIGATION,
+    SETTINGS,
     ASSETS,
-    COMPILING
+    COMPILING,
+    COMPLETE
 }

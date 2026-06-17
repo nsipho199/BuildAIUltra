@@ -9,4 +9,10 @@
 /build
 /captures
 .externalNativeBuild
+*.class
+server/builds/
+server/server/builds/
+server/.server/
+server/build/
+server/out/
 

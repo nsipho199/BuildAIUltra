@@ -1,0 +1,24 @@
+android:
+  - changed-files:
+      - any-glob-to-any-file:
+          - app/**/*
+          - build.gradle.kts
+          - settings.gradle.kts
+          - gradle.properties
+          - gradle/**/*
+
+server:
+  - changed-files:
+      - any-glob-to-any-file:
+          - server/**/*
+
+github_actions:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**/*
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - docs/**/*

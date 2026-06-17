@@ -1,12 +1,9 @@
 package com.buildai.ultra.ui
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import com.buildai.ultra.R
 import com.buildai.ultra.databinding.DialogBuildProgressBinding
 import com.buildai.ultra.model.BuildPhase
 import com.buildai.ultra.model.BuildState
@@ -18,14 +15,17 @@ class BuildProgressDialog : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     fun updateState(state: BuildState) {
-        binding?.apply {
-            val progressText = "${state.progress}%"
-            progressLabel.text = progressText
-            progressIndicator.progress = state.progress
+        binding.apply {
+            val progressPercent = (state.progress * 100).toInt().coerceIn(0, 100)
+            progressLabel.text = "$progressPercent%"
+            progressIndicator.progress = progressPercent
             phaseText.text = getPhaseLabel(state.phase)
             statusText.text = when {
-                state.progress < 100 -> "Building your app…"
-                else -> "Complete!"
+                state.progress < 0.3f -> "Analyzing your idea…"
+                state.progress < 0.5f -> "Generating app code…"
+                state.progress < 0.8f -> "Creating resources…"
+                state.progress < 1f -> "Compiling APK…"
+                else -> "App ready!"
             }
         }
     }
@@ -43,7 +43,7 @@ class BuildProgressDialog : BottomSheetDialogFragment() {
         dialog?.setCanceledOnTouchOutside(false)
     }
 
-    override fun getTheme(): Int = R.style.BottomSheetDialogTheme
+    override fun getTheme(): Int = com.buildai.ultra.R.style.BottomSheetDialogTheme
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -56,15 +56,17 @@ class BuildProgressDialog : BottomSheetDialogFragment() {
         fun newInstance(): BuildProgressDialog = BuildProgressDialog()
 
         private fun getPhaseLabel(phase: BuildPhase): String = when (phase) {
-            BuildPhase.ANALYZING -> "Analyzing your idea…"
-            BuildPhase.PLANNING -> "Planning architecture…"
-            BuildPhase.DESIGNING -> "Designing user interface…"
-            BuildPhase.CODING -> "Generating application logic…"
-            BuildPhase.DATABASE -> "Creating database schema…"
-            BuildPhase.API -> "Building APIs…"
-            BuildPhase.NAVIGATION -> "Setting up navigation…"
-            BuildPhase.ASSETS -> "Generating assets…"
-            BuildPhase.COMPILING -> "Compiling APK…"
+            BuildPhase.ANALYZING -> "Analyzing your idea"
+            BuildPhase.PLANNING -> "Planning architecture"
+            BuildPhase.UI_GENERATION -> "Generating UI"
+            BuildPhase.LOGIC_GENERATION -> "Writing app logic"
+            BuildPhase.DATABASE -> "Creating database"
+            BuildPhase.API_CREATION -> "Creating APIs"
+            BuildPhase.NAVIGATION -> "Setting up navigation"
+            BuildPhase.SETTINGS -> "Configuring settings"
+            BuildPhase.ASSETS -> "Generating assets"
+            BuildPhase.COMPILING -> "Compiling APK"
+            BuildPhase.COMPLETE -> "App Ready"
         }
     }
 }
