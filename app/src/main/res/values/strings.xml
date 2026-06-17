@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">BuildAI Ultra</string>
+    <string name="subtitle">Describe your app idea and AI builds it</string>
     <string name="idea_hint">Describe the app you want to build…\n\nExample: "Build a food delivery app with login, maps, payments and live order tracking."</string>
     <string name="build_button">BUILD THE APP</string>
     <string name="dialog_building">Building your app…</string>
@@ -7,4 +8,22 @@
     <string name="dialog_close">Close</string>
     <string name="empty_idea_error">Please describe your app idea first.</string>
     <string name="install_apk">INSTALL APK</string>
+    <string name="share_apk">Share APK Link</string>
+    <string name="download_started">Download started</string>
+    <string name="history_title">Build History</string>
+    <string name="history_empty">No builds yet.\nDescribe an app idea and build it!</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_server_section">Server Configuration</string>
+    <string name="settings_server_url_hint">Server URL</string>
+    <string name="settings_save">Save</string>
+    <string name="settings_saved">Server URL saved</string>
+    <string name="settings_mode_section">Mode</string>
+    <string name="settings_demo_mode">Demo Mode</string>
+    <string name="settings_demo_mode_desc">Simulate builds locally without a server connection</string>
+    <string name="settings_about_section">About</string>
+    <string name="settings_version">Version 1.0.0</string>
+    <string name="settings_description">BuildAI Ultra generates Android apps from natural language descriptions using AI.</string>
+    <string name="nav_build">Build</string>
+    <string name="nav_history">History</string>
+    <string name="nav_settings">Settings</string>
 </resources>

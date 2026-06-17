@@ -1,8 +1,11 @@
 package com.buildai.ultra.ui
 
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +40,11 @@ class BuildCompleteDialog : BottomSheetDialogFragment() {
         binding.sizeText.text = "APK Size: $sizeText"
 
         binding.installButton.setOnClickListener {
-            downloadAndInstall(downloadUrl)
+            downloadApk(downloadUrl)
+        }
+
+        binding.shareButton.setOnClickListener {
+            shareApk(downloadUrl)
         }
 
         binding.closeButton.setOnClickListener {
@@ -45,15 +52,40 @@ class BuildCompleteDialog : BottomSheetDialogFragment() {
         }
     }
 
-    private fun downloadAndInstall(url: String) {
+    private fun downloadApk(url: String) {
         try {
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(Uri.parse(url), "application/vnd.android.package-archive")
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            if (url.startsWith("http")) {
+                val request = DownloadManager.Request(Uri.parse(url)).apply {
+                    setTitle("BuildAI Ultra APK")
+                    setDescription("Downloading your generated app")
+                    setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                    setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "BuildAIUltra.apk")
+                }
+                val manager = requireContext().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                manager.enqueue(request)
+                Toast.makeText(requireContext(), R.string.download_started, Toast.LENGTH_SHORT).show()
+            } else {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(Uri.parse(url), "application/vnd.android.package-archive")
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+                }
+                startActivity(intent)
             }
-            startActivity(intent)
         } catch (e: Exception) {
             Toast.makeText(requireContext(), "Download URL: $url", Toast.LENGTH_LONG).show()
+        }
+        dismiss()
+    }
+
+    private fun shareApk(url: String) {
+        try {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, "Check out my app built with BuildAI Ultra!\nDownload: $url")
+            }
+            startActivity(Intent.createChooser(intent, "Share APK link"))
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Could not open share sheet", Toast.LENGTH_SHORT).show()
         }
     }
 

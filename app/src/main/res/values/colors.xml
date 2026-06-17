@@ -16,4 +16,7 @@
     <color name="build_progress_fill">#6C63FF</color>
     <color name="card_stroke">#6C63FF</color>
     <color name="button_text">#FFFFFF</color>
+    <color name="status_complete">#FF4CAF50</color>
+    <color name="status_failed">#FFFF5252</color>
+    <color name="status_badge_background">#1A4CAF50</color>
 </resources>

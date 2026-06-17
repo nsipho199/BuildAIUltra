@@ -64,9 +64,9 @@ class BuildApiService {
     private fun parseBuildStatus(json: String): BuildStatus {
         val obj = JSONObject(json)
         val download = if (obj.has("download_url") && !obj.isNull("download_url"))
-            obj.optString("download_url", null) else null
+            obj.optString("download_url", "") else null
         val err = if (obj.has("error") && !obj.isNull("error"))
-            obj.optString("error", null) else null
+            obj.optString("error", "") else null
         return BuildStatus(
             buildId = obj.optString("build_id", ""),
             status = obj.optString("status", ""),
